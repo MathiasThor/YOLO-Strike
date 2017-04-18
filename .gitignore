@@ -31,3 +31,10 @@
 # Debug files
 *.dSYM/
 *.su
+
+darknet
+*.weights
+backup/
+darknet19_448.conv.23
+*.png
+*.jpg
