@@ -26,7 +26,7 @@ EOF
     exit 1
 }
 
-data="./../AnoTool/data.txt"
+data="./../data/data.txt"
 train="./../data/train.txt"
 test="./../data/test.txt"
 pic_dir=""
@@ -72,8 +72,7 @@ while [ $# -gt 0 ] ; do
     shift
 done
 
-echo "0" > $data
-ls $pic_dir | sed -e 's/\..*$//' >> $data
+ls $pic_dir | sed -e 's/\..*$//' > $data
 
 num_lines=`find $pic_dir -maxdepth 1 | wc -l`
 num_lines=$((num_lines-1))

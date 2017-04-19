@@ -1,4 +1,4 @@
-classes= [number_of_classes]
+classes=1
 train  = ./data/train.txt
 valid  = ./data/test.txt
 names  = obj.names

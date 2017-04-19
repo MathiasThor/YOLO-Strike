@@ -67,23 +67,23 @@ done
 ################ MAIN
 if [ $viz_anchor = 1 ] && [ ! $train = "none" ]; then
   echo "Generating and Vizualizing anchors"
-  python python_files/gen_anchors.py -filelist=$train -num_clusters=$num_clusters &> /dev/null
-  python python_files/vizualize_anchors.py -anchor_dir=$PWD/anchors/ -visualization_dir=$PWD &> /dev/null
+  python python_files/gen_anchors.py -filelist=$train -output_dir=$PWD/output_data/anchors/ -num_clusters=$num_clusters &> /dev/null
+  python python_files/vizualize_anchors.py -anchor_dir=$PWD/output_data/anchors/ -visualization_dir=$PWD/output_data/ &> /dev/null
   echo "Generated:" # TODO: Make better
-  ls -d -1 $PWD/anchors*.png
-  ls -d -1 $PWD/anchors/*
+  ls -d -1 $PWD/output_data/anchors*.png
+  ls -d -1 $PWD/output_data/anchors/*
 elif [ $viz_anchor = 1 ]; then
   echo "Vizualizing anchors"
-  python python_files/vizualize_anchors.py -anchor_dir=$PWD/anchors/ -visualization_dir=$PWD &> /dev/null
+  python python_files/vizualize_anchors.py -anchor_dir=$PWD/output_data/nchors/ -visualization_dir=$PWD/output_data/ &> /dev/null
   echo ""
   echo "Generated:" # TODO: Make better
-  ls -d -1 $PWD/anchors*.png
+  ls -d -1 $PWD/output_data/anchors*.png
 elif [ ! $train = "none" ]; then
   echo "Generating anchors from $train"
-  python python_files/gen_anchors.py -filelist=$train -num_clusters=$num_clusters &> /dev/null
+  python python_files/gen_anchors.py -filelist=$train -output_dir=$PWD/output_data/anchors/ -num_clusters=$num_clusters &> /dev/null
   echo ""
   echo "Generated:" # TODO: Make better
-  ls -d -1 $PWD/anchors/*
+  ls -d -1 $PWD/output_data/anchors/*
 else
   usage "No parameters provided"
 fi
