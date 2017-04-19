@@ -1,0 +1,5 @@
+classes= [number_of_classes]
+train  = ./data/train.txt
+valid  = ./data/test.txt
+names  = obj.names
+backup = backup
