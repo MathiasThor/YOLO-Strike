@@ -103,7 +103,23 @@ else
 fi
 
 if [ $opencv = "yes" ]; then
-  sed -i 's/OPENCV=.*/OPENCV=1/' Makefile
+  sed -i 's/^OPENCV=.*/OPENCV=1/' Makefile
 else
-  sed -i 's/OPENCV=.*/OPENCV=0/' Makefile
+  sed -i 's/^OPENCV=.*/OPENCV=0/' Makefile
 fi
+
+echo ""
+while true; do
+    read -p "Do you want to 'make'? (y/n): " yn
+    case $yn in
+        [Yy]* ) make; break;;
+        [Nn]* ) break;;
+        * ) echo "Please answer yes or no.";;
+    esac
+done
+
+echo ""
+echo "You are now ready to train and detect with YOLO"
+echo " "
+echo "Note: Please place your training images in ./data/obj-images"
+echo "Note: Pleace place your  training labels in ./data/obj-labels"
