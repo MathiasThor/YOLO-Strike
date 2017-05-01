@@ -28,6 +28,11 @@ EOF
     exit 1
 }
 
+if [ -z "$1" ]
+  then
+    usage "No argument supplied"
+fi
+
 pic_dir=""
 label_dir=""
 dryrun=1

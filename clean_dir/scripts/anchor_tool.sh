@@ -25,6 +25,11 @@ EOF
     exit 1
 }
 
+if [ -z "$1" ]
+  then
+    usage "No argument supplied"
+fi
+
 train="none"
 viz_anchor=0
 num_clusters=2

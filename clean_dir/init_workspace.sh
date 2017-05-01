@@ -44,8 +44,8 @@ echo "Initializing your YOLO Workspace"
 
 echo -n "Enter the number of classes in your dataset (1-99): "
 read num_of_classes
-[[ "$num_of_classes" =~ -?[0-9]+ ]] || die "You need to input an integer!!!"
-(( num_of_classes >= 1 && num_of_classes <= 99 )) || die "The integer you entered is out of range!!!"
+[[ "$num_of_classes" =~ -?[0-9]+ ]] || die "You need to input an integer!"
+(( num_of_classes >= 1 && num_of_classes <= 99 )) || die "The integer you entered is out of range!"
 echo ""
 
 > obj.names
@@ -87,8 +87,11 @@ done
 
 sed -i "s/^classes=.*/classes=${num_of_classes}/" obj.data
 sed -i "s/^classes=.*/classes=${num_of_classes}/" yolo-obj.cfg
+newfilter=$(((${num_of_classes}+5)*5))
+tac yolo-obj.cfg | sed "0,/filters=/ s/^filters=.*/filters=${newfilter}/" | tac > yolo-obj_tmp.cfg
+mv yolo-obj_tmp.cfg yolo-obj.cfg
 
-# TODO: Make replacements in yolo-obj
+# TODO: Replace filters in yolo cfg
 
 if [ $gpu = "yes" ]; then
   sed -i 's/^GPU=.*/GPU=1/' Makefile
@@ -112,14 +115,19 @@ echo ""
 while true; do
     read -p "Do you want to 'make'? (y/n): " yn
     case $yn in
-        [Yy]* ) make; break;;
-        [Nn]* ) break;;
+        [Yy]* )
+        make;
+        echo ""
+        echo "You are now ready to train and detect with YOLO"
+        echo " "
+        echo "Note: Please place your training images in ./data/obj-images"
+        echo "Note: Pleace place your training labels in ./data/obj-labels"
+        break;;
+        [Nn]* )
+        echo ""
+        echo "The workspace has been set up to meet your requirements"
+        echo "Run 'make' in your root workspace folder."
+        break;;
         * ) echo "Please answer yes or no.";;
     esac
 done
-
-echo ""
-echo "You are now ready to train and detect with YOLO"
-echo " "
-echo "Note: Please place your training images in ./data/obj-images"
-echo "Note: Pleace place your  training labels in ./data/obj-labels"

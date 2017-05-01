@@ -23,6 +23,11 @@ EOF
     exit 1
 }
 
+if [ -z "$1" ]
+  then
+    usage "No argument supplied"
+fi
+
 filename=""
 while [ $# -gt 0 ] ; do
     case "$1" in
