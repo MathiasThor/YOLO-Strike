@@ -12,7 +12,7 @@ import sys
 import os
 import shutil
 import random
-      
+
 
 def IOU(x,centroids):
     dists = []
@@ -35,27 +35,27 @@ def avg_IOU(X,centroids):
     sum = 0.
     for i in range(X.shape[0]):
         #note IOU() will return array which contains IoU for each centroid and X[i] // slightly ineffective, but I am too lazy
-        sum+= max(IOU(X[i],centroids)) 
+        sum+= max(IOU(X[i],centroids))
     return sum/n
 
 def write_anchors_to_file(centroids,X,anchor_file):
     f = open(anchor_file,'w')
-    
+
     anchors = centroids*416/32
-    
-    print 'Anchors = ', centroids*416/32 
-    
+
+    print 'Anchors = ', centroids*416/32
+
     num_anchors = anchors.shape[0]
     for i in range(num_anchors-1):
         f.write('%f,%f, '%(anchors[i][0],anchors[i][1]))
 
     #there should not be comma after last anchor, that's why
     f.write('%f,%f\n'%(anchors[num_anchors-1][0],anchors[num_anchors-1][1]))
-    
-    f.write('%f\n'%(avg_IOU(X,centroids)))
+
+    f.write('Average IOU: %f\n'%(avg_IOU(X,centroids)))
 
 def kmeans(X,centroids,eps,anchor_file):
-    
+
     D=[]
     old_D = []
     iterations = 0
@@ -64,40 +64,40 @@ def kmeans(X,centroids,eps,anchor_file):
 
     while True:
         iterations+=1
-        D = []            
+        D = []
         for i in range(X.shape[0]):
             d = 1 - IOU(X[i],centroids)
             D.append(d)
         D = np.array(D)
         if len(old_D)>0:
             diff = np.sum(np.abs(D-old_D))
-        
+
         print 'diff = %f'%diff
 
         if diff<eps or iterations>100:
             print "Number of iterations took = %d"%(iterations)
             print "Centroids = ",centroids
 
-            
+
             write_anchors_to_file(centroids,X,anchor_file)
-            
+
             return
 
-        #assign samples to centroids 
+        #assign samples to centroids
         belonging_centroids = np.argmin(D,axis=1)
-        print belonging_centroids 
+        print belonging_centroids
 
         #calculate the new centroids
         centroid_sums=np.zeros((c,dim),np.float)
         for i in range(belonging_centroids.shape[0]):
             centroid_sums[belonging_centroids[i]]+=X[i]
-        
+
         for j in range(c):
-            
+
             print '#annotations in centroid[%d] is %d'%(j,np.sum(belonging_centroids==j))
             centroids[j] = centroid_sums[j]/np.sum(belonging_centroids==j)
-        
-        print 'new centroids = ',centroids        
+
+        print 'new centroids = ',centroids
 
 
 
@@ -106,29 +106,29 @@ def kmeans(X,centroids,eps,anchor_file):
 
 def main(argv):
     parser = argparse.ArgumentParser()
-    parser.add_argument('-filelist', default = 'E:\\dataset\\face_detection\\WIDER\\filelist_all.txt', 
+    parser.add_argument('-filelist', default = 'E:\\dataset\\face_detection\\WIDER\\filelist_all.txt',
                         help='path to filelist\n' )
-    parser.add_argument('-num_clusters', default = 0, type = int, 
-                        help='number of clusters\n' )  
-    parser.add_argument('-output_dir', default = 'anchors', type = str, 
-                        help='Output anchor directory\n' )  
+    parser.add_argument('-num_clusters', default = 0, type = int,
+                        help='number of clusters\n' )
+    parser.add_argument('-output_dir', default = 'anchors', type = str,
+                        help='Output anchor directory\n' )
 
-   
+
     args = parser.parse_args()
-    
+
 
     if not os.path.exists(args.output_dir):
         os.mkdir(args.output_dir)
 
 
     f = open(args.filelist)
-    
+
 
     lines = [line.rstrip('\n') for line in f.readlines()]
-    
+
     annotation_dims = []
     for line in lines:
-        
+
         line = line.replace('images','labels')
         line = line.replace('.jpg','.txt')
 
@@ -139,12 +139,12 @@ def main(argv):
             #print w,h
             annotation_dims.append(map(float,(w,h)))
     annotation_dims = np.array(annotation_dims)
-    
-    
+
+
     eps = 0.005
-    
+
     if args.num_clusters == 0:
-        for num_clusters in range(1,11): #we make 1 through 10 clusters 
+        for num_clusters in range(1,11): #we make 1 through 10 clusters
             anchor_file = join( args.output_dir,'anchors%d.txt'%(num_clusters))
 
             indices = [ random.randrange(annotation_dims.shape[0]) for i in range(num_clusters)]
