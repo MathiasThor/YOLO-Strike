@@ -53,8 +53,8 @@ done
 
 ################ MAIN
 echo "Plotting $filename"
-# temp_file="tmpfile.txt"
-temp_file=$(mktemp /tmp/abc-script.XXXXXX)
+temp_file="tmpfile.txt"
+# temp_file=$(mktemp /tmp/abc-script.XXXXXX)
 
 sed -n '/^[0-9]/p' $filename > $temp_file
 sed -n '/images$/p' $filename > $temp_file
@@ -62,4 +62,4 @@ awk -F'[: ]' '{print $1 "\t" $4}' $temp_file > temp_file.tmp && mv temp_file.tmp
 
 python ./python_files/plotter.py $temp_file &> /dev/null
 
-rm ${temp_file}
+# rm ${temp_file}

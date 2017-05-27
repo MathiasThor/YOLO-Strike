@@ -15,11 +15,15 @@ with open(fn, 'r') as data:
         x.append(float(p[0]))
         y.append(float(p[1]))
 
-plt.style.use('grayscale') # seaborn-bright
-plt.plot(x, y)
+plt.figure(figsize=(30,5))
+plt.axis([0, 8000, 0, 1])
+plt.rcParams.update({'font.size': 27})
+plt.style.use('seaborn-bright') # seaborn-bright
+plt.plot(x, y, linewidth=3)
 plt.ylabel('Avg. Error')
 plt.xlabel('Iteration')
 plt.title('YOLO Avg. Error')
 plt.grid(True)
-plt.savefig("./output_data/YOLO_error_plot.png")
+plt.tight_layout()
+plt.savefig("./output_data/416.png")
 plt.show()
