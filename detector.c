@@ -400,66 +400,64 @@ void validate_detector_recall(char *cfgfile, char *weightfile)
     float recall = 0;
     float avg_iou_n = 0;
 
-    for(thresh = thresh_start; thresh < thresh_limit; thresh += 0.1){
-      for(i = 0; i < m; ++i){
-          char *path = paths[i];
-          image orig = load_image_color(path, 0, 0);
-          image sized = resize_image(orig, net.w, net.h);
-          char *id = basecfg(path);
-          network_predict(net, sized.data);
-          get_region_boxes(l, 1, 1, thresh, probs, boxes, 1, 0, .5);
-          if (nms) do_nms(boxes, probs, l.w*l.h*l.n, 1, nms);
+    for(i = 0; i < m; ++i){
+        char *path = paths[i];
+        image orig = load_image_color(path, 0, 0);
+        image sized = resize_image(orig, net.w, net.h);
+        char *id = basecfg(path);
+        network_predict(net, sized.data);
+        get_region_boxes(l, 1, 1, thresh, probs, boxes, 1, 0, .5);
+        if (nms) do_nms(boxes, probs, l.w*l.h*l.n, 1, nms);
 
-          char labelpath[4096];
-          find_replace(path, "images", "labels", labelpath);
-          find_replace(labelpath, "JPEGImages", "labels", labelpath);
-          find_replace(labelpath, ".jpg", ".txt", labelpath);
-          find_replace(labelpath, ".JPEG", ".txt", labelpath);
+        char labelpath[4096];
+        find_replace(path, "images", "labels", labelpath);
+        find_replace(labelpath, "JPEGImages", "labels", labelpath);
+        find_replace(labelpath, ".jpg", ".txt", labelpath);
+        find_replace(labelpath, ".JPEG", ".txt", labelpath);
 
-          int num_labels = 0;
-          box_label *truth = read_boxes(labelpath, &num_labels);
-          for(k = 0; k < l.w*l.h*l.n; ++k){
-              if(probs[k][0] > thresh){
-                  ++proposals;
-              }
-          }
-          for (j = 0; j < num_labels; ++j) {
-              ++total;
-              box t = {truth[j].x, truth[j].y, truth[j].w, truth[j].h};
-              float best_iou = 0;
-              for(k = 0; k < l.w*l.h*l.n; ++k){
-                  float iou = box_iou(boxes[k], t);
-                  if(probs[k][0] > thresh && iou > best_iou){
-                      best_iou = iou;
-                  }
-              }
-              avg_iou += best_iou;
-              if(best_iou > iou_thresh){
-                  ++correct;
-              }
-          }
+        int num_labels = 0;
+        box_label *truth = read_boxes(labelpath, &num_labels);
+        for(k = 0; k < l.w*l.h*l.n; ++k){
+            if(probs[k][0] > thresh){
+                ++proposals;
+            }
+        }
+        for (j = 0; j < num_labels; ++j) {
+            ++total;
+            box t = {truth[j].x, truth[j].y, truth[j].w, truth[j].h};
+            float best_iou = 0;
+            for(k = 0; k < l.w*l.h*l.n; ++k){
+                float iou = box_iou(boxes[k], t);
+                if(probs[k][0] > thresh && iou > best_iou){
+                    best_iou = iou;
+                }
+            }
+            avg_iou += best_iou;
+            if(best_iou > iou_thresh){
+                ++correct;
+            }
+        }
 
-          fprintf(stderr,"\rThresh %.2f in progress %.2f%%", thresh, i/(float)m*100);
-          // Old one:
-          // fprintf(stderr, "%5d %5d %5d\tRPs/Img: %.2f\tIOU: %.2f%%\tRecall:%.2f%%\n", i, correct, total, (float)proposals/(i+1), avg_iou*100/total, 100.*correct/total);
-          free(id);
-          free_image(orig);
-          free_image(sized);
-      }
-      precision = correct/(float)proposals;
-      recall    = correct/(float)total;
-      avg_iou_n = avg_iou*100/total;
-
-      total = 0;
-      correct = 0;
-      proposals = 0;
-      avg_iou = 0;
-      iou_thresh = .5;
-      nms = .4;
-
-      fprintf(stderr,"\rThresh %.2f in progress %.2f%%", thresh, 100.0);
-      fprintf(stderr, "\nPrecision: %.2f \tRecall: %.2f\tIOU: %.2f%%\n\n", precision, recall, avg_iou_n);
+        fprintf(stderr,"\rThresh %.2f in progress %.2f%%", thresh, i/(float)m*100);
+        // Old one:
+        // fprintf(stderr, "%5d %5d %5d\tRPs/Img: %.2f\tIOU: %.2f%%\tRecall:%.2f%%\n", i, correct, total, (float)proposals/(i+1), avg_iou*100/total, 100.*correct/total);
+        free(id);
+        free_image(orig);
+        free_image(sized);
     }
+    precision = correct/(float)proposals;
+    recall    = correct/(float)total;
+    avg_iou_n = avg_iou*100/total;
+
+    total = 0;
+    correct = 0;
+    proposals = 0;
+    avg_iou = 0;
+    iou_thresh = .5;
+    nms = .4;
+
+    fprintf(stderr,"\rThresh %.2f in progress %.2f%%", thresh, 100.0);
+    fprintf(stderr, "\nPrecision: %.2f \tRecall: %.2f\tIOU: %.2f%%\n\n", precision, recall, avg_iou_n);
 }
 
 void test_detector(char *datacfg, char *cfgfile, char *weightfile, char *filename, float thresh, float hier_thresh)
