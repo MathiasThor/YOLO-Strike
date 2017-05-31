@@ -1,5 +1,0 @@
-classes= 20
-train  = /home/mat/githubs/darknet/voc-test/train.txt
-valid  = /home/mat/githubs/darknet/voc-test/2007_test.txt
-names = data/voc.names
-backup = backup
