@@ -22,8 +22,8 @@ Options:
 -d, --data                       make the data.txt for AnoTool
 -p, --picturedir [PICTURE DIR]   path to directory containing training images
 -r, --percentage [  0 - 100  ]   how many percentage of the data should train
-                                 contain. ( default is 70% -> 15% for test set
-                                 and 15% for validation set )
+                                 contain, i.e should there be a validation set?
+                                 ( default is 100% and thus no validation set)
 EOF
     exit 1
 }
@@ -36,11 +36,9 @@ fi
 dodata="false"
 data="./../data/data.txt"
 train="./../data/train.txt"
-testvalid="./../data/tmp_testvalid.txt"
-test="./../data/test.txt"
 validation="./../data/validation.txt"
 pic_dir=""
-procent=0.70
+procent=1.00
 while [ $# -gt 0 ] ; do
     case "$1" in
     -h|--help)
@@ -51,13 +49,13 @@ while [ $# -gt 0 ] ; do
             rm $data
             echo "Removed $data"
         fi
-        if [ -f $test ] ; then
-            rm $test
-            echo "Removed $test"
-        fi
         if [ -f $train ] ; then
             rm $train
             echo "Removed $train"
+        fi
+        if [ -f $validation ] ; then
+            rm $validation
+            echo "Removed $validation"
         fi
         exit 0
         ;;
@@ -103,24 +101,18 @@ if [ "$procent" == "1.00" ]; then
 fi
 
 num_lines=`find $pic_dir -maxdepth 1 | wc -l`
-num_lines=$((num_lines-1))
+num_lines=$((num_lines))
 limit=$(expr $num_lines*$procent | bc | awk '{print int($1+0.5)}')
 
+echo $limit
+
+limit=$((limit+1))
 find $pic_dir -maxdepth 1 | head -n "$limit" > $train
 sed -i '1d' $train
 
 limit=$((limit+1))
-find $pic_dir -maxdepth 1 | tail -n +"$limit" > $testvalid
-
-lines=`wc -l $testvalid | cut -f1 -d' '`
-splitpoint=`expr $lines / 2`
-
-cat $testvalid | head -n "$splitpoint" > $test
-cat $testvalid | tail -n +"$splitpoint" > $validation
-
-rm $testvalid &> /dev/null
+find $pic_dir -maxdepth 1 | tail -n +"$limit" > $validation
 
 echo ""
 echo "Generated $train"
-echo "Generated $test"
 echo "Generated $validation"
