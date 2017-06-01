@@ -1,7 +1,9 @@
 '''
 Created on Feb 20, 2017
+Original author: jumabek
 
-@author: jumabek
+Modified on April 2, 2017
+Modified by: MathiasThor
 '''
 from os import listdir
 from os.path import isfile, join
