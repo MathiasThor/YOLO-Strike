@@ -29,10 +29,10 @@ EOF
     exit 1
 }
 
-if [ -z "$1" ]
-  then
-    usage "No argument supplied"
-fi
+# if [ -z "$1" ]
+#   then
+#     usage "No argument supplied"
+# fi
 
 dodata="false"
 data="./../data/data.txt"
@@ -94,25 +94,25 @@ fi
 if [ "$procent" == "1.00" ]; then
   echo ""
   echo "100% in training set"
-  find $pic_dir -maxdepth 1 > $train
+  find $pic_dir -maxdepth 1 -not -path '*/\.gitkeep' > $train
   sed -i '1d' $train
   echo ""
   echo "Generated $train"
   exit 1
 fi
 
-num_lines=`find $pic_dir -maxdepth 1 | wc -l`
+num_lines=`find $pic_dir -maxdepth 1 -not -path '*/\.gitkeep' | wc -l`
 num_lines=$((num_lines))
 limit=$(expr $num_lines*$procent | bc | awk '{print int($1+0.5)}')
 
 echo $limit
 
 limit=$((limit+1))
-find $pic_dir -maxdepth 1 | head -n "$limit" > $train
+find $pic_dir -maxdepth 1 -not -path '*/\.gitkeep' | head -n "$limit" > $train
 sed -i '1d' $train
 
 limit=$((limit+1))
-find $pic_dir -maxdepth 1 | tail -n +"$limit" > $validation
+find $pic_dir -maxdepth 1 -not -path '*/\.gitkeep' | tail -n +"$limit" > $validation
 
 echo ""
 echo "Generated $train"

@@ -1,0 +1,2 @@
+./../data/images/walknet.jpg
+./../data/images/hexeh-b.jpg
