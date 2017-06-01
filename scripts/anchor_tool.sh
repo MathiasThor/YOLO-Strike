@@ -28,10 +28,10 @@ EOF
     exit 1
 }
 
-if [ -z "$1" ]
-  then
-    usage "No argument supplied"
-fi
+# if [ -z "$1" ]
+#   then
+#     usage "No argument supplied"
+# fi
 
 train="./../data/train.txt"
 rescon="none"
@@ -72,10 +72,6 @@ while [ $# -gt 0 ] ; do
     esac
     shift
 done
-
-# TODO:
-# python python_files/convert_anchor_res.py -anchor_file=./anchors/anchors7.txt -n_w=800 -n_h=800
-
 
 ################ MAIN
 if [ $rescon = "yes" ]; then
