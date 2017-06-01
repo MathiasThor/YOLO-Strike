@@ -120,8 +120,9 @@ while true; do
         echo ""
         echo "You are now ready to train and detect with YOLO"
         echo " "
-        echo "Note: Please place your training images in ./data/obj-images"
-        echo "Note: Pleace place your training labels in ./data/obj-labels"
+        echo "Note: Please place your training images in ./data/images"
+        echo "Note: Pleace place your training labels in ./data/labels"
+        echo "      These labels can be generated with the AnnoTool."
         break;;
         [Nn]* )
         echo ""
