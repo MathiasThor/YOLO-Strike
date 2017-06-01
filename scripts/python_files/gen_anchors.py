@@ -45,7 +45,7 @@ def write_anchors_to_file(centroids,X,anchor_file):
 
     anchors = centroids*416/32
 
-    print 'Anchors = ', centroids*416/32
+    # print 'Anchors = ', centroids*416/32
 
     num_anchors = anchors.shape[0]
     for i in range(num_anchors-1):
@@ -74,11 +74,11 @@ def kmeans(X,centroids,eps,anchor_file):
         if len(old_D)>0:
             diff = np.sum(np.abs(D-old_D))
 
-        print 'diff = %f'%diff
+        # print 'diff = %f'%diff
 
         if diff<eps or iterations>100:
-            print "Number of iterations took = %d"%(iterations)
-            print "Centroids = ",centroids
+            # print "Number of iterations took = %d"%(iterations)
+            # print "Centroids = ",centroids
 
 
             write_anchors_to_file(centroids,X,anchor_file)
@@ -87,7 +87,7 @@ def kmeans(X,centroids,eps,anchor_file):
 
         #assign samples to centroids
         belonging_centroids = np.argmin(D,axis=1)
-        print belonging_centroids
+        # print belonging_centroids
 
         #calculate the new centroids
         centroid_sums=np.zeros((c,dim),np.float)
@@ -96,15 +96,15 @@ def kmeans(X,centroids,eps,anchor_file):
 
         for j in range(c):
 
-            print '#annotations in centroid[%d] is %d'%(j,np.sum(belonging_centroids==j))
+            # print '#annotations in centroid[%d] is %d'%(j,np.sum(belonging_centroids==j))
             centroids[j] = centroid_sums[j]/np.sum(belonging_centroids==j)
 
-        print 'new centroids = ',centroids
+        # print 'new centroids = ',centroids
 
 
 
         old_D = D.copy()
-    print D
+    # print D
 
 def main(argv):
     parser = argparse.ArgumentParser()
@@ -152,8 +152,8 @@ def main(argv):
             indices = [ random.randrange(annotation_dims.shape[0]) for i in range(num_clusters)]
             centroids = annotation_dims[indices]
             kmeans(annotation_dims,centroids,eps,anchor_file)
-            print 'centroids.shape', centroids.shape
-        print 'Filelist = %s'%(args.filelist)
+            # print 'centroids.shape', centroids.shape
+        # print 'Filelist = %s'%(args.filelist)
     else:
         anchor_file = join( args.output_dir,'anchors%d.txt'%(args.num_clusters))
         indices = [ random.randrange(annotation_dims.shape[0]) for i in range(args.num_clusters)]
@@ -161,8 +161,8 @@ def main(argv):
         kmeans(annotation_dims,centroids,eps,anchor_file)
 
 
-        print 'centroids.shape', centroids.shape
-        print 'Filelist = %s'%(args.filelist)
+        # print 'centroids.shape', centroids.shape
+        # print 'Filelist = %s'%(args.filelist)
 
 if __name__=="__main__":
     main(sys.argv)
