@@ -19,7 +19,7 @@ Usage: $PROGNAME [OPTION ...] [foo] [bar]
 Options:
 -h, --help                            display this usage message and exit
 -g, --genanchors  [TRAININGFILE]      path to the training file for your data
--c, --clusternums [NUMBEROFCLUSTERS]  the desired number of clusters (default 2)
+-c, --clusternums [NUMBEROFCLUSTERS]  the desired number of clusters (default 5)
 -v, --vizualizeanchors                vizualize the anchors
 -r, --resolutionconvert               convert the standard 416x416 anchors to
                                       the resolution specified as user input
@@ -35,7 +35,7 @@ fi
 train="none"
 rescon="none"
 viz_anchor=0
-num_clusters=2
+num_clusters=5
 while [ $# -gt 0 ] ; do
     case "$1" in
     -h|--help)

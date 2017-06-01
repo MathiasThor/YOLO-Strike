@@ -22,8 +22,9 @@ Options:
 -h, --help                       display this usage message and exit
 -nd, --nodryrun                  does a dryrun (does not delete anything)
 -p, --picturedir [PICTURE DIR]   path to directory containing training images
+                                 default dir is: ./../data/images/
 -l, --labeldir   [LABEL DIR]     path to directory containing training labels
-
+                                 default dur is: ./../data/labels/
 EOF
     exit 1
 }
@@ -33,8 +34,8 @@ if [ -z "$1" ]
     usage "No argument supplied"
 fi
 
-pic_dir=""
-label_dir=""
+pic_dir="./../data/images/"
+label_dir="./../data/labels/"
 dryrun=1
 while [ $# -gt 0 ] ; do
     case "$1" in
