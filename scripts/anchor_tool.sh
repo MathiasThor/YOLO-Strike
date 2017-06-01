@@ -18,7 +18,8 @@ Usage: $PROGNAME [OPTION ...] [foo] [bar]
 
 Options:
 -h, --help                            display this usage message and exit
--g, --genanchors  [TRAININGFILE]      path to the training file for your data
+-p, --pathtrainfile  [TRAININGFILE]   path to the training file for your data
+                                      default is ./../data/train.txt
 -c, --clusternums [NUMBEROFCLUSTERS]  the desired number of clusters (default 5)
 -v, --vizualizeanchors                vizualize the anchors
 -r, --resolutionconvert               convert the standard 416x416 anchors to
@@ -32,7 +33,7 @@ if [ -z "$1" ]
     usage "No argument supplied"
 fi
 
-train="none"
+train="./../data/train.txt"
 rescon="none"
 viz_anchor=0
 num_clusters=5
@@ -44,7 +45,7 @@ while [ $# -gt 0 ] ; do
     -r|--resolutionconvert)
         rescon="yes"
         ;;
-    -g|--genanchors)
+    -p|--pathtrainfile)
         if [ ! -f $2 ] || [ -z $2 ]; then
           die "File '$2' not found!"
         fi
@@ -92,17 +93,16 @@ if [ $rescon = "yes" ]; then
   echo "Converting $file_name to $width x $height..."
   echo " "
   python python_files/convert_anchor_res.py -anchor_file=$file_name -n_w=$width -n_h=$height
-
-elif [ $viz_anchor = 1 ] && [ ! $train = "none" ]; then
-  echo "Generating and Vizualizing anchors"
-  python python_files/gen_anchors.py -filelist=$train -output_dir=$PWD/output_data/anchors/ -num_clusters=$num_clusters &> /dev/null
-  python python_files/vizualize_anchors.py -anchor_dir=$PWD/output_data/anchors/ -visualization_dir=$PWD/output_data/ &> /dev/null
-  echo "Generated:" # TODO: Make better
-  echo "$PWD/output_data/anchors$num_clusters.png"
-  echo "$PWD/output_data/anchors/anchors$num_clusters.txt"
-  echo " "
-  echo "Copy the content of this file into the yolo_obj.cfg file (after 'anchors=')"
-  echo "The second line in the file shows the avg. IOU for the anchor"
+# elif [ $viz_anchor = 1 ] && [ ! $train = "none" ]; then
+#   echo "Generating and Vizualizing anchors"
+#   python python_files/gen_anchors.py -filelist=$train -output_dir=$PWD/output_data/anchors/ -num_clusters=$num_clusters &> /dev/null
+#   python python_files/vizualize_anchors.py -anchor_dir=$PWD/output_data/anchors/ -visualization_dir=$PWD/output_data/ &> /dev/null
+#   echo "Generated:" # TODO: Make better
+#   echo "$PWD/output_data/anchors$num_clusters.png"
+#   echo "$PWD/output_data/anchors/anchors$num_clusters.txt"
+#   echo " "
+#   echo "Copy the content of this file into the yolo_obj.cfg file (after 'anchors=')"
+#   echo "The second line in the file shows the avg. IOU for the anchor"
 elif [ $viz_anchor = 1 ]; then
   echo "Vizualizing anchors"
   python python_files/vizualize_anchors.py -anchor_dir=$PWD/output_data/anchors/ -visualization_dir=$PWD/output_data/ &> /dev/null
