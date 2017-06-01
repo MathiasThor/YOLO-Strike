@@ -1,3 +1,10 @@
+'''
+Created on Feb 20, 2017
+Original author: jumabek
+
+Modified on April 2, 2017
+Modified by: MathiasThor
+'''
 import os
 import sys
 import argparse
