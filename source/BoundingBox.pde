@@ -3,7 +3,7 @@ class BoundingBox{
   BoundingBox(Vector _pos){ 
     pos = _pos;
     size = new Vector(0, 0);
-    c = color(255,255,255);
+    c = color(0,255,0);
     active = true;
     type = -1;
   }

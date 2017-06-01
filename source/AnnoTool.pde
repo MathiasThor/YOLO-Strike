@@ -108,7 +108,7 @@ void  readAndLoadIntroImage(){
   fill(255,255,0);
   
   textSize(72);
-  text("AnoTool", 30, 100);
+  text("AnnoTool", 30, 100);
   
   textSize(36);
   text("Mouse button: Draw bounding box", displayWidth * 0.1, displayHeight * 0.3);
@@ -167,7 +167,7 @@ void setup(){
   resetBoundingBoxes();
   
   noFill();
-  stroke(255);
+  stroke(color(0,255,0));
   textSize(28);
 }
 
@@ -175,7 +175,8 @@ void draw(){
   //image(img,0,0,displayWidth,displayHeight);
   if (!intro)
   {
-    fill(255,255,255);
+    fill(0,255,0);
+    stroke(color(0,255,0));
     image(img,0,0);
     strokeWeight(1);
     line(mouseX - crossHairSize, mouseY, mouseX + crossHairSize, mouseY);

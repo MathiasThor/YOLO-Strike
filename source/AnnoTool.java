@@ -14,7 +14,7 @@ import java.io.InputStream;
 import java.io.OutputStream; 
 import java.io.IOException; 
 
-public class AnoTool extends PApplet {
+public class AnnoTool extends PApplet {
 
 PImage img;
 PImage prevImg;
@@ -126,7 +126,7 @@ public void  readAndLoadIntroImage(){
   fill(255,255,0);
   
   textSize(72);
-  text("AnoTool", 30, 100);
+  text("AnnoTool", 30, 100);
   
   textSize(36);
   text("Mouse button: Draw bounding box", displayWidth * 0.1f, displayHeight * 0.3f);
@@ -185,7 +185,7 @@ public void setup(){
   resetBoundingBoxes();
   
   noFill();
-  stroke(255);
+  stroke(color(0,255,0));
   textSize(28);
 }
 
@@ -193,7 +193,8 @@ public void draw(){
   //image(img,0,0,displayWidth,displayHeight);
   if (!intro)
   {
-    fill(255,255,255);
+    fill(0,255,0);
+    stroke(color(0,255,0));
     image(img,0,0);
     strokeWeight(1);
     line(mouseX - crossHairSize, mouseY, mouseX + crossHairSize, mouseY);
@@ -324,7 +325,7 @@ class BoundingBox{
   BoundingBox(Vector _pos){ 
     pos = _pos;
     size = new Vector(0, 0);
-    c = color(255,255,255);
+    c = color(0,255,0);
     active = true;
     type = -1;
   }
@@ -465,7 +466,7 @@ class Vector{
 };
   public void settings() {  fullScreen(); }
   static public void main(String[] passedArgs) {
-    String[] appletArgs = new String[] { "--present", "--window-color=#666666", "--hide-stop", "AnoTool" };
+    String[] appletArgs = new String[] { "AnnoTool" };
     if (passedArgs != null) {
       PApplet.main(concat(appletArgs, passedArgs));
     } else {
