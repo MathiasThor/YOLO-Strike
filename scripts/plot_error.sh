@@ -15,6 +15,7 @@ usage() {
 
     cat << EOF
 Usage: $PROGNAME [OPTION ...] [foo] [bar]
+NOTE: This script requires python
 
 Options:
 -h, --help              display this usage message and exit
