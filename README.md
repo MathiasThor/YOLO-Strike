@@ -6,4 +6,6 @@ YOLO-Strike is a project about the [YOLO framework](https://pjreddie.com/darknet
 
 The YOLO-Strike report can be found [here](https://github.com/MathiasThor/YOLO-Strike/blob/master/YOLO_Strike.pdf).
 
-A video showing the detection of friendly and hostile players in the computer game Counter-Strike: Global Offensive can be found [here](https://www.youtube.com/watch?v=jqjcvi2Q3Io).
+A video showing the detection of friendly and hostile players in the computer game Counter-Strike: Global Offensive can be found below.
+
+[![YoloStrikeVideo](https://img.youtube.com/vi/jqjcvi2Q3Io/0.jpg)](https://www.youtube.com/watch?v=jqjcvi2Q3Io)
